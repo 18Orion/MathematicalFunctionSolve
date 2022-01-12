@@ -12,7 +12,7 @@ void funcion::prepare(string funcion){
     for (int i = 0; i <= funcion.length(); i++) {
         if(isdigit(funcion[i])||funcion[i]=='.'||funcion[i]=='x'){
             if(funcion[i]=='x'){
-                if(isdigit(funcion[i-1])||funcion[i]=='x'){
+                if(isdigit(funcion[i-1])&&funcion[i]=='x'){
                     fnVector.push_back(cache);
                     cache="";
                     fnVector.push_back("*");
@@ -27,6 +27,8 @@ void funcion::prepare(string funcion){
             fnVector.push_back({funcion[i]});
         }
     }
+    //fnVector.push_back("+");
+    //fnVector.push_back("0");
 }
 
 void funcion::showFunction(){
@@ -123,10 +125,11 @@ double funcion::solve(double x){
                 result=pow(n1, n2);
             }
             if(fn[i]=="/"){
-                result=(n1*n2);
+                result=(n1/n2);
             }
             fn2.push_back(to_string(result));
         }else{
+            result=0;
             if(fn[i]=="+"||fn[i]=="-"){
                 fn2.push_back(fn[i]);
             }else{
@@ -138,19 +141,15 @@ double funcion::solve(double x){
             }
         }
     }
-    if(fn2.size()==0){
-        result=stod(fn2[0]);
-    }else{
-        for (int i = 0; i < fn2.size(); i++) {
-            if(i==0&&(fn2[i]!="+"||fn2[i]!="-")){
-                result=result+stod(fn2[i]);
-            }
-            if(fn2[i-1]=="+"){
-                result=result+stod(fn2[i]);
-            }
-            if(fn2[i]=="-"){
-                result=result-stod(fn2[i]);
-            }
+    for (int i = 0; i < fn2.size(); i++) {
+        if(i==0&&(fn2[i]!="+"||fn2[i]!="-")){
+            result=result+stod(fn2[i]);
+        }
+        if(fn2[i-1]=="+"){
+            result=result+stod(fn2[i]);
+        }
+        if(fn2[i]=="-"){
+            result=result-stod(fn2[i]);
         }
     }
     return result;
