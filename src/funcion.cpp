@@ -1,6 +1,7 @@
 #include "funcion.hh"
 
 funcion::funcion(){
+
 }
 
 funcion::~funcion(){
@@ -9,6 +10,7 @@ funcion::~funcion(){
 
 void funcion::prepare(string funcion){
     string cache;
+    /*Separa la funcion en un vector para su uso más facil*/
     for (int i = 0; i <= funcion.length(); i++) {
         if(isdigit(funcion[i])||funcion[i]=='.'||funcion[i]=='x'){
             if(funcion[i]=='x'){
@@ -27,8 +29,6 @@ void funcion::prepare(string funcion){
             fnVector.push_back({funcion[i]});
         }
     }
-    //fnVector.push_back("+");
-    //fnVector.push_back("0");
 }
 
 void funcion::showFunction(){
@@ -37,74 +37,11 @@ void funcion::showFunction(){
     }
 }
 
-double funcion::solve2(double x){
-    double n1, n2, result;
-    bool continueMultiplicating=false;
-    vector<string> fn, fn2;
-    for (int i = 0; i < fnVector.size(); i++) {
-        if(fnVector[i]=="*"||fnVector[i]=="/"||fnVector[i]=="^"){
-            if(fnVector.at(i-1)=="x"){
-                n1=x;
-            }else{
-                n1=stod(fnVector[i-1]);
-            }
-            if(fnVector.at(i+1)=="x"){
-                n2=x;
-            }else{
-                n2=stod(fnVector[i+1]);
-            }
-            if(fnVector[i]=="*"){
-                fn.push_back(to_string(n1*n2));
-            }
-            if(fnVector[i]=="^"){
-                fn.push_back(to_string(pow(n1, n2)));
-            }
-            if(fnVector[i]=="/"){
-                fn.push_back(to_string(n1*n2));
-            }
-            i++;
-        }else{
-            if(fnVector[i]=="+"||fnVector[i]=="-"){
-                fn.push_back(fnVector[i]);
-            }else{
-                if(i<fnVector.size()){
-                    if(!(fnVector[i+1]=="*"||fnVector[i+1]=="/")){
-                        fn.push_back(fnVector[i]);
-                    }
-                }
-            }
-        }
-    }
-    if(fn.size()==0){
-        result=stod(fn[0]);
-    }else{
-        for (int i = 0; i < fn.size(); i++) {
-            if(i==0&&(fn[i]!="+"||fn[i]!="-")){
-                if(fn[i]=="x"){
-                    n1=x;
-                }else{
-                    n1=stod(fn[i]);
-                }
-                result=result+n1;
-            }
-            if(fn[i-1]=="+"){
-                if(fn[i]=="x"){n1=x;}else{n1=stod(fn[i]);}
-                result=result+n1;
-            }
-            if(fn[i]=="-"){
-                if(fn[i]=="x"){n1=x;}else{n1=stod(fn[i]);}
-                result=result-n1;
-            }
-            
-        }
-    }
-    return result;
-}
-
 double funcion::solve(double x){
-    double n1, n2, result;
-    bool continueMultiplicating=false;
-    vector<string> fn, fn2;
+    double n1, n2, result=0;
+    vector<string> fn;
+    /*Substituye las variables de la ecuación copiandolas a un nuevo vector que va a
+    ser modificado según se va resolviendo la función                               */
     for (int i = 0; i < fnVector.size(); i++) {
         if(fnVector[i]!=""){
             if(fnVector[i]=="x"){
@@ -114,43 +51,53 @@ double funcion::solve(double x){
             }
         }
     }
-    for (int i = 0; i < fn.size(); i++) {
-        if(fn[i]=="*"||fn[i]=="/"||fn[i]=="^"){
-            n1=stod(fn[i-1]);
-            n2=stod(fn[i+1]);
-            if(fn[i]=="*"){
-                result=(n1*n2);
-            }
-            if(fn[i]=="^"){
-                result=pow(n1, n2);
-            }
-            if(fn[i]=="/"){
-                result=(n1/n2);
-            }
-            fn2.push_back(to_string(result));
-        }else{
-            result=0;
-            if(fn[i]=="+"||fn[i]=="-"){
-                fn2.push_back(fn[i]);
-            }else{
-                if(i<fn.size()){
-                    if(!(fn[i+1]=="*"||fn[i+1]=="/")){
-                        fn2.push_back(fn[i]);
-                    }
-                }
-            }
+    for (int i = 0; i < fn.size(); i++) {           //Hace las potencias
+        if(fn[i]=="^"){
+            fn[i-1]=to_string(pow(stod(fn[i-1]), stod(fn[i+1])));
+            fn.erase(fn.begin()+i+1);
+            fn.erase(fn.begin()+i);
         }
     }
-    for (int i = 0; i < fn2.size(); i++) {
-        if(i==0&&(fn2[i]!="+"||fn2[i]!="-")){
-            result=result+stod(fn2[i]);
+    for (int i = 1; i < fn.size(); i++) {           //Hace las multiplicaciones y divisiones
+        if(fn[i]=="*"){
+            fn[i-1]=to_string(stod(fn[i-1])*stod(fn[i+1]));
+            fn.erase(fn.begin()+i+1);
+            fn.erase(fn.begin()+i);
         }
-        if(fn2[i-1]=="+"){
-            result=result+stod(fn2[i]);
+        if(fn[i]=="/"){
+            fn[i-1]=to_string(stod(fn[i-1])/stod(fn[i+1]));
+            fn.erase(fn.begin()+i+1);
+            fn.erase(fn.begin()+i);
         }
-        if(fn2[i]=="-"){
-            result=result-stod(fn2[i]);
+    }
+    for (int i = 0; i < fn.size(); i++) {           //Hace las sumas y restas
+        if(i==0&&!isSum(fn[0])){
+            result=result+stod(fn[0]);
+        }
+        if(fn[i]=="+"){
+            result=result+stod(fn[i+1]);
+        }
+        if(fn[i]=="-"){
+            result=result-stod(fn[i+1]);
         }
     }
     return result;
+}
+
+bool funcion::isSum(string symbol){
+    //Comprueba si un símbolo es una suma o resta
+    bool is=false;
+    if(symbol[0]=='+'||symbol[0]=='-'){
+        is=true;
+    }
+    return is;
+}
+
+bool funcion::isMult(string symbol){
+    //Comprueba si un símbolo es una multiplicación o división o derivados
+    bool is=false;
+    if(symbol[0]=='*'||symbol[0]=='/'||symbol[0]=='^'){
+        is=true;
+    }
+    return is;
 }

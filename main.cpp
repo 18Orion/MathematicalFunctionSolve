@@ -13,7 +13,6 @@ int main(){
     funcion *fn=new funcion();
     fn->prepare(func);
     cout<<fn->solve(x);
-    //fn->showFunction();
     delete fn;
     return 0;
 }

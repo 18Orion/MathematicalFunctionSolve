@@ -1,3 +1,4 @@
-g++ -c src/funcion.cpp -Iinclude
-g++ -c main.cpp -Iinclude
-g++ -o ejecutable main.o funcion.o
+clang++ -c src/funcion.cpp -Iinclude
+clang++ -c mainTime.cpp -Iinclude
+clang++ -o ejecutable mainTime.o funcion.o
+rm *.o
