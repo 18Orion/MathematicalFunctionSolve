@@ -1,0 +1,2 @@
+This is a library and header for resolving a function from an input, given in a string.
+For compiling install clang and execute sh compile.sh.
