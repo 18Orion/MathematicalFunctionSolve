@@ -14,7 +14,7 @@ void funcion::prepare(string funcion){
     for (int i = 0; i <= funcion.length(); i++) {
         if(isdigit(funcion[i])||funcion[i]=='.'||funcion[i]=='x'){
             if(funcion[i]=='x'){
-                if(isdigit(funcion[i-1])&&funcion[i]=='x'){
+                if(isdigit(funcion[i-1])){
                     fnVector.push_back(cache);
                     cache="";
                     fnVector.push_back("*");
@@ -43,12 +43,10 @@ double funcion::solve(double x){
     /*Substituye las variables de la ecuación copiandolas a un nuevo vector que va a
     ser modificado según se va resolviendo la función                               */
     for (int i = 0; i < fnVector.size(); i++) {
-        if(fnVector[i]!=""){
-            if(fnVector[i]=="x"){
-                fn.push_back(to_string(x));
-            }else{
-                fn.push_back(fnVector[i]);
-            }
+        if(fnVector[i]=="x"){
+            fn.push_back(to_string(x));
+        }else{
+            fn.push_back(fnVector[i]);
         }
     }
     for (int i = 0; i < fn.size(); i++) {           //Hace las potencias
@@ -72,10 +70,10 @@ double funcion::solve(double x){
     }
     for (int i = 0; i < fn.size(); i++) {           //Hace las sumas y restas
         if(i==0&&!isSum(fn[0])){
-            result=result+stod(fn[0]);
+            result+=stod(fn[0]);
         }
         if(fn[i]=="+"){
-            result=result+stod(fn[i+1]);
+            result+=stod(fn[i+1]);
         }
         if(fn[i]=="-"){
             result=result-stod(fn[i+1]);
