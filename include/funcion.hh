@@ -7,6 +7,8 @@ using namespace std;
 class funcion{
     private:
         vector<string> fnVector;
+        bool hasMult=false;
+        bool hasPower=false;
         bool isSum(string symbol);
         bool isMult(string symbol);
     public:
