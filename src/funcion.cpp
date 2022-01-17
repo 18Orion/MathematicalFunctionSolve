@@ -1,4 +1,4 @@
-#include "funcion.hh"
+#include "funcion.hpp"
 
 funcion::funcion(){
 
@@ -37,10 +37,12 @@ void funcion::prepare(string funcion){
     }
 }
 
-void funcion::showFunction(){
+string funcion::returnFunction(){
+    string function;
     for (int i = 0; i < fnVector.size(); i++){
-        cout<<fnVector[i]<<endl;
+        function+=fnVector[i];
     }
+    return function;
 }
 
 double funcion::solve(double x){
