@@ -18,6 +18,7 @@ void funcion::prepare(string funcion){
                     fnVector.push_back(cache);
                     cache="";
                     fnVector.push_back("*");
+                    hasMult=true;
                 }
                 fnVector.push_back("x");
             }else{
@@ -27,6 +28,9 @@ void funcion::prepare(string funcion){
             if(cache!="") fnVector.push_back(cache);
             cache="";
             fnVector.push_back({funcion[i]});
+            if(isMult({funcion[i]})) hasMult=true;
+            if(funcion[i]=='^') hasPower=true;
+
         }
     }
 }
@@ -51,23 +55,27 @@ double funcion::solve(double x){
             fn.push_back(fnVector[i]);
         }
     }
-    for (int i = 0; i < fn.size(); i++) {           //Hace las potencias
-        if(fn[i]=="^"){
-            fn[i-1]=to_string(pow(stod(fn[i-1]), stod(fn[i+1])));
-            fn.erase(fn.begin()+i+1);
-            fn.erase(fn.begin()+i);
+    if(hasPower){
+        for (int i = 0; i < fn.size(); i++) {           //Hace las potencias
+            if(fn[i]=="^"){
+                fn[i-1]=to_string(pow(stod(fn[i-1]), stod(fn[i+1])));
+                fn.erase(fn.begin()+i+1);
+                fn.erase(fn.begin()+i);
+            }
         }
     }
-    for (int i = 1; i < fn.size(); i++) {           //Hace las multiplicaciones y divisiones
-        if(fn[i]=="*"){
-            fn[i-1]=to_string(stod(fn[i-1])*stod(fn[i+1]));
-            fn.erase(fn.begin()+i+1);
-            fn.erase(fn.begin()+i);
-        }
-        if(fn[i]=="/"){
-            fn[i-1]=to_string(stod(fn[i-1])/stod(fn[i+1]));
-            fn.erase(fn.begin()+i+1);
-            fn.erase(fn.begin()+i);
+    if(hasMult){
+        for (int i = 1; i < fn.size(); i++) {           //Hace las multiplicaciones y divisiones
+            if(fn[i]=="*"){
+                fn[i-1]=to_string(stod(fn[i-1])*stod(fn[i+1]));
+                fn.erase(fn.begin()+i+1);
+                fn.erase(fn.begin()+i);
+            }
+            if(fn[i]=="/"){
+                fn[i-1]=to_string(stod(fn[i-1])/stod(fn[i+1]));
+                fn.erase(fn.begin()+i+1);
+                fn.erase(fn.begin()+i);
+            }
         }
     }
     for (int i = 0; i < fn.size(); i++) {           //Hace las sumas y restas

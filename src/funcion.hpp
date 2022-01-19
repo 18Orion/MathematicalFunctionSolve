@@ -1,1 +1,1 @@
-/Datos/Programación/Proyectos C++/Introducción de funciones/include/funcion.hh
+/Datos/Programación/Proyectos C++/Introducción de funciones/include/funcion.hpp
