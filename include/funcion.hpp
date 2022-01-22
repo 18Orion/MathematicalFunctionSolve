@@ -11,7 +11,6 @@ class funcion{
         bool hasPower=false;
         bool isSum(string symbol);
         bool isMult(string symbol);
-        string returnFunction(vector<string> inV);                               //Muestra la función
         double solve(double x, vector<string> inV);         //Resuelve la función y devuelve el valor numérico
     public:
         funcion();

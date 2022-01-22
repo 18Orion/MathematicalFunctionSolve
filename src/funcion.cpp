@@ -1,12 +1,8 @@
 #include "funcion.hpp"
 
-funcion::funcion(){
+funcion::funcion(){}
 
-}
-
-funcion::~funcion(){
-
-}
+funcion::~funcion(){}
 
 void funcion::prepare(string funcion){
     string cache;
@@ -55,21 +51,13 @@ void funcion::prepare(string funcion){
 
 string funcion::returnFunction(){
     string function;
-    for (int i = 0, a=1; i < fnVector.size(); i++){
+    for (int i = 0, a=1; i < fnVector[0].size(); i++){
         if(fnVector[0][i]=="()"){
             function+="(";
-            function+=returnFunction(fnVector[a]);
+            for (int b = 0; b < fnVector[a].size(); b++) function+=fnVector[a][b];
             function+=")";
             a++;
         }else function+=fnVector[0][i];
-    }
-    return function;
-}
-
-string funcion::returnFunction(vector<string> inV){
-    string function;
-    for (int i = 0; i < inV.size(); i++){
-        function+=inV[i];
     }
     return function;
 }
