@@ -12,7 +12,7 @@ int main(){
     cin>>func;
     funcion *fn=new funcion();
     fn->prepare(func);
-    cout<<fn->solve(x);
+    cout<<fn->returnFunction()<<" = "<<fn->solve(x);
     delete fn;
-    return 0;
+    return EXIT_SUCCESS;
 }
