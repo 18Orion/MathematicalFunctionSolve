@@ -15,7 +15,6 @@ class funcion{
     public:
         funcion();
             ~funcion();
-        string fn;
         double solve(double x);         //Resuelve la función y devuelve el valor numérico
         void prepare(string funcion);   //Prepara la función para ser resuelta
         string returnFunction();            //Muestra la función

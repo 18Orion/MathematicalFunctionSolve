@@ -107,11 +107,10 @@ double funcion::solve(double x){
         if(i==0&&!isSum(fn[0])){
             result+=stod(fn[0]);
         }
-        if(fn[i]=="+"){
+        if(fn[i]=="+"&&fn[i][0]!='-'){
             result+=stod(fn[i+1]);
-        }
-        if(fn[i]=="-"){
-            result=result-stod(fn[i+1]);
+        }else if(fn[i]=="-"){
+            result-=stod(fn[i+1]);
         }
     }
     return result;
@@ -169,7 +168,7 @@ double funcion::solve(double x, vector<string> inV){
 bool funcion::isSum(string symbol){
     //Comprueba si un símbolo es una suma o resta
     bool is=false;
-    if(symbol[0]=='+'||symbol[0]=='-'){
+    if(symbol=="+"||symbol=="-"){
         is=true;
     }
     return is;
@@ -178,7 +177,7 @@ bool funcion::isSum(string symbol){
 bool funcion::isMult(string symbol){
     //Comprueba si un símbolo es una multiplicación o división o derivados
     bool is=false;
-    if(symbol[0]=='*'||symbol[0]=='/'){
+    if(symbol=="*"||symbol=="/"){
         is=true;
     }
     return is;
